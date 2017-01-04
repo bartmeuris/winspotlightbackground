@@ -101,8 +101,23 @@ func main() {
 			log.SetOutput(f)
 		}
 	}
+
 	// Construct the spotlight source directory
 	spotdir := filepath.Join(os.Getenv("USERPROFILE"), "/AppData/Local/Packages/Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy/LocalState/Assets/")
+
+	// Log options with which this instance was started
+	log.Printf("================================================\n")
+	log.Printf("== Starting Windows Spotlight background sync ==\n")
+	log.Printf("Target dir: %s\n", *targetDir)
+	log.Printf("Source dir: %s\n", spotdir)
+	log.Printf("Log file  : %s\n", *logFile)
+	log.Printf("Landscape        : %t\n", *prefLandscape)
+	log.Printf("Portrait         : %t\n", *prefPortrait)
+	log.Printf("Requested Width  : %d\n", *ignoreWidth)
+	log.Printf("Requested Height : %d\n", *ignoreHeight)
+	log.Printf("Copy small images: %t\n", *copySmallImages)
+	log.Printf("Target dedup     : %t\n", *targetDeDup)
+	log.Printf("Target validate  : %t\n", *targetValidateClean)
 
 	// Ensure the target directory exists
 	os.MkdirAll(*targetDir, 0777)
