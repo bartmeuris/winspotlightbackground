@@ -118,20 +118,19 @@ func main() {
 			log.Printf("ERROR: Could not copy %s to %s", f, filepath.Join(*targetDir, filepath.Base(f.FileName)+"."+f.Format))
 		}
 	}
-	if *targetDeDup {
-		log.Printf("Looking for duplicate images to clean up...")
-		rmfiles := GetDirImages(*targetDir)
-		RemoveDuplicateImages(rmfiles, *targetDeDup)
-		for _, f := range rmfiles {
-			if err := f.Validate(); err != nil {
-				if *targetValidateClean {
-					log.Printf("Image in targetdir not matching requested validation, removing: %s", f)
-					if err := os.Remove(f.FileName); err != nil {
-						log.Printf("Could not remove %s: %s", f, err)
-					}
-				} else {
-					log.Printf("WARN: Image in targetdir not matching requested validation: %s", f)
+
+	log.Printf("Analyzing target folder...")
+	rmfiles := GetDirImages(*targetDir)
+	RemoveDuplicateImages(rmfiles, *targetDeDup)
+	for _, f := range rmfiles {
+		if err := f.Validate(); err != nil {
+			if *targetValidateClean {
+				log.Printf("Image in targetdir not matching requested validation, removing: %s", f)
+				if err := os.Remove(f.FileName); err != nil {
+					log.Printf("Could not remove %s: %s", f, err)
 				}
+			} else {
+				log.Printf("WARN: Image in targetdir not matching requested validation: %s", f)
 			}
 		}
 	}
