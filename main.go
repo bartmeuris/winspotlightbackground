@@ -91,7 +91,7 @@ func main() {
 	ignoreWidth = flag.Int("width", 0, "only copy files with this width. 0 = ignore width")
 	ignoreHeight = flag.Int("height", 0, "only copy files with this height. 0 = ignore height")
 	copySmallImages = flag.Bool("copysmall", false, "copy small images (<= 150)")
-	targetDeDup = flag.Bool("targetdedup", true, "remove all duplicate images in target directory")
+	targetDeDup = flag.Bool("targetdedup", false, "remove all duplicate images in target directory")
 	targetValidateClean = flag.Bool("targetvalidateremove", false, "validate all files in target directory and remove them if they don't match (DANGAROUS)")
 	logFile := flag.String("logfile", "", "file to log to")
 	flag.Parse()
