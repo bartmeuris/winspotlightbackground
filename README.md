@@ -21,7 +21,7 @@ The program can:
 * `-height <height>`: Only copy images with a height matching the specified number.
 * `-copysmall`: Copy small (<150x150) images anyway. Default: false.
 * `-targetdedup`: Remove duplicate files from the target folder (see `-target`).
-* `-targetvalidateremove`: Removes all images in the target directory not matching the specified filters. **This is dangarous and can lead to data loss.**
+* `-targetvalidateremove`: Removes all images in the target directory not matching the specified filters. **This is dangerous and can lead to data loss.**
 * `-logfile <filename>`: Log messages to the specified file. By default, nothing is logged.
 
 # Recommended usage
