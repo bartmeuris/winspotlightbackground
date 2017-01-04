@@ -1,0 +1,9 @@
+language: go
+go:
+  - 1.7.x
+
+gobuild_args: -ldflags -H=windowsgui
+
+env:
+  - GOOS=windows
+    GOARCH=amd64
