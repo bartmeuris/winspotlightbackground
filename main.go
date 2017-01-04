@@ -101,7 +101,11 @@ func main() {
 			log.SetOutput(f)
 		}
 	}
+	// Construct the spotlight source directory
 	spotdir := filepath.Join(os.Getenv("USERPROFILE"), "/AppData/Local/Packages/Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy/LocalState/Assets/")
+
+	// Ensure the target directory exists
+	os.MkdirAll(*targetDir, 0777)
 
 	files := GetDirImages(spotdir)
 	for _, f := range files {
