@@ -12,7 +12,7 @@ import (
 )
 
 var prefLandscape, prefPortrait, copySmallImages, targetDeDup, targetValidateClean *bool
-var ignoreWidth, ignoreHeight *int
+var matchWidth, matchHeight *int
 
 const smallWidth = 150
 const smallHeight = 150
@@ -22,11 +22,11 @@ func (img *ImgFileInfo) Validate() error {
 	if !*copySmallImages && ((img.ImgConf.Width <= smallWidth) || (img.ImgConf.Height <= smallHeight)) {
 		return newImgError(fmt.Sprintf("Image %dx%d or smaller", smallWidth, smallHeight), img)
 	}
-	if (*ignoreHeight != 0) && (img.ImgConf.Height != *ignoreHeight) {
-		return newImgError(fmt.Sprintf("height %d != expected %d", img.ImgConf.Height, *ignoreHeight), img)
+	if (*matchHeight != 0) && (img.ImgConf.Height != *matchHeight) {
+		return newImgError(fmt.Sprintf("height %d != expected %d", img.ImgConf.Height, *matchHeight), img)
 	}
-	if (*ignoreWidth != 0) && (img.ImgConf.Width != *ignoreWidth) {
-		return newImgError(fmt.Sprintf("width %d != expected %d", img.ImgConf.Width, *ignoreWidth), img)
+	if (*matchWidth != 0) && (img.ImgConf.Width != *matchWidth) {
+		return newImgError(fmt.Sprintf("width %d != expected %d", img.ImgConf.Width, *matchWidth), img)
 	}
 	if *prefLandscape || *prefPortrait {
 		if *prefLandscape && !*prefPortrait && (img.ImgConf.Width < img.ImgConf.Height) {
@@ -88,8 +88,8 @@ func main() {
 	targetDir := flag.String("target", filepath.Join(os.Getenv("USERPROFILE"), "/Pictures/Spotlight"), "the target directory")
 	prefLandscape = flag.Bool("landscape", true, "only copy landscape images (width > height)")
 	prefPortrait = flag.Bool("portrait", false, "only copy portrait images (height > width)")
-	ignoreWidth = flag.Int("width", 0, "only copy files with this width. 0 = ignore width")
-	ignoreHeight = flag.Int("height", 0, "only copy files with this height. 0 = ignore height")
+	matchWidth = flag.Int("width", 0, "only copy files with this width. 0 = ignore width")
+	matchHeight = flag.Int("height", 0, "only copy files with this height. 0 = ignore height")
 	copySmallImages = flag.Bool("copysmall", false, "copy small images (<= 150)")
 	targetDeDup = flag.Bool("targetdedup", false, "remove all duplicate images in target directory")
 	targetValidateClean = flag.Bool("targetvalidateremove", false, "validate all files in target directory and remove them if they don't match (DANGAROUS)")
@@ -113,8 +113,8 @@ func main() {
 	log.Printf("Log file  : %s\n", *logFile)
 	log.Printf("Landscape        : %t\n", *prefLandscape)
 	log.Printf("Portrait         : %t\n", *prefPortrait)
-	log.Printf("Requested Width  : %d\n", *ignoreWidth)
-	log.Printf("Requested Height : %d\n", *ignoreHeight)
+	log.Printf("Requested Width  : %d\n", *matchWidth)
+	log.Printf("Requested Height : %d\n", *matchHeight)
 	log.Printf("Copy small images: %t\n", *copySmallImages)
 	log.Printf("Target dedup     : %t\n", *targetDeDup)
 	log.Printf("Target validate  : %t\n", *targetValidateClean)
