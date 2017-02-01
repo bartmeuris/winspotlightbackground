@@ -14,8 +14,9 @@ import (
 var prefLandscape, prefPortrait, copySmallImages, targetDeDup, targetValidateClean *bool
 var matchWidth, matchHeight *int
 
-const smallWidth = 150
-const smallHeight = 150
+const smallWidth = 800
+const smallHeight = 600
+const spotlightDir = "/AppData/Local/Packages/Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy/LocalState/Assets/"
 
 // Validate if an image matches the specified rules
 func (img *ImgFileInfo) Validate() error {
@@ -90,7 +91,7 @@ func main() {
 	prefPortrait = flag.Bool("portrait", false, "only copy portrait images (height > width)")
 	matchWidth = flag.Int("width", 0, "only copy files with this width. 0 = ignore width")
 	matchHeight = flag.Int("height", 0, "only copy files with this height. 0 = ignore height")
-	copySmallImages = flag.Bool("copysmall", false, "copy small images (<= 150)")
+	copySmallImages = flag.Bool("copysmall", false, fmt.Sprintf("copy small images (<= %dx%d)", smallWidth, smallHeight))
 	targetDeDup = flag.Bool("targetdedup", false, "remove all duplicate images in target directory")
 	targetValidateClean = flag.Bool("targetvalidateremove", false, "validate all files in target directory and remove them if they don't match (DANGAROUS)")
 	logFile := flag.String("logfile", "", "file to log to")
@@ -103,7 +104,7 @@ func main() {
 	}
 
 	// Construct the spotlight source directory
-	spotdir := filepath.Join(os.Getenv("USERPROFILE"), "/AppData/Local/Packages/Microsoft.Windows.ContentDeliveryManager_cw5n1h2txyewy/LocalState/Assets/")
+	spotdir := filepath.Join(os.Getenv("USERPROFILE"), spotlightDir)
 
 	// Log options with which this instance was started
 	log.Printf("================================================\n")
