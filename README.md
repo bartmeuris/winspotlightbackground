@@ -23,6 +23,9 @@ The program can:
 * `-targetdedup`: Remove duplicate files from the target folder (see `-target`).
 * `-targetvalidateremove`: Removes all images in the target directory not matching the specified filters. **This is dangerous and can lead to data loss.**
 * `-logfile <filename>`: Log messages to the specified file. By default, nothing is logged.
+* `-nodetect`: Don't use the detected main display resolution. Might be useful if your main display is switched on regular basis.
+
+Unless `-nodetect` is specified, when `-width` and `-height` aren't provided, the detected resolution of the main display is used.
 
 # Recommended usage
 

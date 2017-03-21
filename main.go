@@ -87,6 +87,8 @@ func RemoveDuplicateImages(fileInfo []*ImgFileInfo, removefiles bool) {
 }
 
 func main() {
+	detect_x, detect_y = getResolution()
+
 	targetDir := flag.String("target", filepath.Join(os.Getenv("USERPROFILE"), "/Pictures/Spotlight"), "the target directory")
 	prefLandscape = flag.Bool("landscape", true, "only copy landscape images (width > height)")
 	prefPortrait = flag.Bool("portrait", false, "only copy portrait images (height > width)")
@@ -96,6 +98,7 @@ func main() {
 	targetDeDup = flag.Bool("targetdedup", false, "remove all duplicate images in target directory")
 	targetValidateClean = flag.Bool("targetvalidateremove", false, "validate all files in target directory and remove them if they don't match (DANGAROUS)")
 	logFile := flag.String("logfile", "", "file to log to")
+	noDetect := flag.Bool("nodetect", false, fmt.Sprintf("don't use the detected resolution (%dx%d)", detect_x, detect_y))
 	flag.Parse()
 	if *logFile != "" {
 		if f, err := os.OpenFile(*logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666); err == nil {
@@ -114,21 +117,22 @@ func main() {
 	log.Printf("Target dir: %s\n", *targetDir)
 	log.Printf("Source dir: %s\n", spotdir)
 	log.Printf("Log file  : %s\n", *logFile)
-	log.Printf("Landscape          : %t\n", *prefLandscape)
-	log.Printf("Portrait           : %t\n", *prefPortrait)
-	log.Printf("Copy small images  : %t\n", *copySmallImages)
-	log.Printf("Target dedup       : %t\n", *targetDeDup)
-	log.Printf("Target validate    : %t\n", *targetValidateClean)
-	log.Printf("Detected resolution: %dx%d (main display)", detect_x, detect_y)
+	log.Printf("Landscape              : %t\n", *prefLandscape)
+	log.Printf("Portrait               : %t\n", *prefPortrait)
+	log.Printf("Copy small images      : %t\n", *copySmallImages)
+	log.Printf("Target dedup           : %t\n", *targetDeDup)
+	log.Printf("Target validate        : %t\n", *targetValidateClean)
+	log.Printf("Don't detect resolution: %t\n", *noDetect)
+	log.Printf("Detected resolution    : %dx%d (main display)", detect_x, detect_y)
 
 	// Fall back to autodetected settings
-	if *matchWidth == 0 && *matchHeight == 0 {
+	if !*noDetect && *matchWidth == 0 && *matchHeight == 0 {
 		*matchWidth = detect_x
 		*matchHeight = detect_y
 		log.Printf("No width or height requested, using detected resolution.")
 	} else {
-		log.Printf("Requested Width    : %d\n", *matchWidth)
-		log.Printf("Requested Height   : %d\n", *matchHeight)
+		log.Printf("Requested Width        : %d\n", *matchWidth)
+		log.Printf("Requested Height       : %d\n", *matchHeight)
 	}
 
 	// Ensure the target directory exists
