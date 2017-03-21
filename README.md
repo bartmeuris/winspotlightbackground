@@ -15,8 +15,8 @@ The program can:
 # Commandline options:
 
 * `-target`: Specify a target folder. By default it is the `%USERPROFILE%\Pictures\Spotlight` folder. If this directory does not exists, it is created.
-* `-landscape`: Copy landscape images. This is the default. To disable, specify `-landscape=false`.
-* `-portrait`: Copy portrait images. Useful when you have vertical displays. Disabled by default.
+* `-landscape`: Copy landscape images. Useful when you have landscape displays.
+* `-portrait`: Copy portrait images. Useful when you have vertical displays.
 * `-width <width>`: Only copy images with a widht matching the specified number.
 * `-height <height>`: Only copy images with a height matching the specified number.
 * `-copysmall`: Copy small (<150x150) images anyway. Default: false.

@@ -13,7 +13,7 @@ import (
 
 var prefLandscape, prefPortrait, copySmallImages, targetDeDup, targetValidateClean *bool
 var matchWidth, matchHeight *int
-var detect_x, detect_y int
+var detectX, detectY int
 
 const smallWidth = 800
 const smallHeight = 600
@@ -87,10 +87,10 @@ func RemoveDuplicateImages(fileInfo []*ImgFileInfo, removefiles bool) {
 }
 
 func main() {
-	detect_x, detect_y = getResolution()
+	detectX, detectY = getResolution()
 
 	targetDir := flag.String("target", filepath.Join(os.Getenv("USERPROFILE"), "/Pictures/Spotlight"), "the target directory")
-	prefLandscape = flag.Bool("landscape", true, "only copy landscape images (width > height)")
+	prefLandscape = flag.Bool("landscape", false, "only copy landscape images (width > height)")
 	prefPortrait = flag.Bool("portrait", false, "only copy portrait images (height > width)")
 	matchWidth = flag.Int("width", 0, "only copy files with this width. 0 = ignore width")
 	matchHeight = flag.Int("height", 0, "only copy files with this height. 0 = ignore height")
@@ -98,7 +98,7 @@ func main() {
 	targetDeDup = flag.Bool("targetdedup", false, "remove all duplicate images in target directory")
 	targetValidateClean = flag.Bool("targetvalidateremove", false, "validate all files in target directory and remove them if they don't match (DANGAROUS)")
 	logFile := flag.String("logfile", "", "file to log to")
-	noDetect := flag.Bool("nodetect", false, fmt.Sprintf("don't use the detected resolution (%dx%d)", detect_x, detect_y))
+	noDetect := flag.Bool("nodetect", false, fmt.Sprintf("don't use the detected resolution (%dx%d)", detectX, detectY))
 	flag.Parse()
 	if *logFile != "" {
 		if f, err := os.OpenFile(*logFile, os.O_RDWR|os.O_CREATE|os.O_APPEND, 0666); err == nil {
@@ -110,7 +110,6 @@ func main() {
 	// Construct the spotlight source directory
 	spotdir := filepath.Join(os.Getenv("USERPROFILE"), spotlightDir)
 
-	detect_x, detect_y = getResolution()
 	// Log options with which this instance was started
 	log.Printf("================================================\n")
 	log.Printf("== Starting Windows Spotlight background sync ==\n")
@@ -123,12 +122,12 @@ func main() {
 	log.Printf("Target dedup           : %t\n", *targetDeDup)
 	log.Printf("Target validate        : %t\n", *targetValidateClean)
 	log.Printf("Don't detect resolution: %t\n", *noDetect)
-	log.Printf("Detected resolution    : %dx%d (main display)", detect_x, detect_y)
+	log.Printf("Detected resolution    : %dx%d (main display)", detectX, detectY)
 
 	// Fall back to autodetected settings
 	if !*noDetect && *matchWidth == 0 && *matchHeight == 0 {
-		*matchWidth = detect_x
-		*matchHeight = detect_y
+		*matchWidth = detectX
+		*matchHeight = detectY
 		log.Printf("No width or height requested, using detected resolution.")
 	} else {
 		log.Printf("Requested Width        : %d\n", *matchWidth)
