@@ -13,6 +13,7 @@ import (
 
 var prefLandscape, prefPortrait, copySmallImages, targetDeDup, targetValidateClean *bool
 var matchWidth, matchHeight *int
+var detect_x, detect_y int
 
 const smallWidth = 800
 const smallHeight = 600
@@ -106,19 +107,29 @@ func main() {
 	// Construct the spotlight source directory
 	spotdir := filepath.Join(os.Getenv("USERPROFILE"), spotlightDir)
 
+	detect_x, detect_y = getResolution()
 	// Log options with which this instance was started
 	log.Printf("================================================\n")
 	log.Printf("== Starting Windows Spotlight background sync ==\n")
 	log.Printf("Target dir: %s\n", *targetDir)
 	log.Printf("Source dir: %s\n", spotdir)
 	log.Printf("Log file  : %s\n", *logFile)
-	log.Printf("Landscape        : %t\n", *prefLandscape)
-	log.Printf("Portrait         : %t\n", *prefPortrait)
-	log.Printf("Requested Width  : %d\n", *matchWidth)
-	log.Printf("Requested Height : %d\n", *matchHeight)
-	log.Printf("Copy small images: %t\n", *copySmallImages)
-	log.Printf("Target dedup     : %t\n", *targetDeDup)
-	log.Printf("Target validate  : %t\n", *targetValidateClean)
+	log.Printf("Landscape          : %t\n", *prefLandscape)
+	log.Printf("Portrait           : %t\n", *prefPortrait)
+	log.Printf("Copy small images  : %t\n", *copySmallImages)
+	log.Printf("Target dedup       : %t\n", *targetDeDup)
+	log.Printf("Target validate    : %t\n", *targetValidateClean)
+	log.Printf("Detected resolution: %dx%d (main display)", detect_x, detect_y)
+
+	// Fall back to autodetected settings
+	if *matchWidth == 0 && *matchHeight == 0 {
+		*matchWidth = detect_x
+		*matchHeight = detect_y
+		log.Printf("No width or height requested, using detected resolution.")
+	} else {
+		log.Printf("Requested Width    : %d\n", *matchWidth)
+		log.Printf("Requested Height   : %d\n", *matchHeight)
+	}
 
 	// Ensure the target directory exists
 	os.MkdirAll(*targetDir, 0777)
